@@ -8,22 +8,28 @@ import os
 import pandas as pd
 import altair as alt
 import fileinput
-passw=input('please enter password::')
 
 
-pdf = Pdf.new()
-version = pdf.pdf_version
-#add all pdfs in the file directory in the mpesa_analysis
-for f in glob('/home/mclnerney/mpesa_analysis/files/*.pdf'):
-    src= Pdf.open(f,password=passw)
-    pdf.pages.extend(src.pages)
+#first_arg = sys.argv[1]
+try:
+    if (sys.argv[1] == '-'):
+        f = sys.stdin.read().splitlines()
+    else:
+        filename = sys.argv[1]
+        #f = open(filename, 'r')
+        passw=input('Please enter password::')
+        pdf=pdfplumber.open(filename, password=passw)
+    
+except Exception:
+    print("Error Reading from file:")
 
-pdf.remove_unreferenced_resources()
-pdf.save('mergd.pdf',min_version=version)
 
 
 
-pdf=pdfplumber.open("/home/mclnerney/mpesa_analysis/mergd.pdf")
+
+
+
+#pdf=pdfplumber.open("first_argv", password=passw)
 numpage=len(pdf.pages)
 listtable=[]
 for i in range(numpage):
